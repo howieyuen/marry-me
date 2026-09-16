@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>致小胖猪</title>
+<style>
+  :root{
+    --cream:#FCF7F0; --cream2:#F7EFE4; --ink:#5A4632; --serif-ink:#7A5038;
+    --terra:#C0785E; --muted:#B08A6E; --line:#E7D8C6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;
+    line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body.locked{overflow:hidden;height:100vh}
+  .serif{font-family:"Songti SC","Noto Serif SC",STSong,serif}
+
+  /* 入场门 */
+  .gate{position:fixed;inset:0;z-index:100;background:radial-gradient(120% 120% at 50% 20%,#FFFBF4,#F3E4D2);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;
+    transition:opacity .9s ease,visibility .9s}
+  .gate.open{opacity:0;visibility:hidden}
+  .gate .heart{font-size:44px;margin-bottom:18px}
+  .gate h1{font-size:22px;color:var(--serif-ink);font-weight:600;margin-bottom:8px}
+  .gate p{color:var(--muted);font-size:15px;margin-bottom:26px}
+  .gate .q{font-size:18px;color:var(--ink);margin-bottom:16px}
+  .gate input{border:none;border-bottom:2px solid var(--line);background:transparent;
+    font-size:20px;text-align:center;padding:8px 12px;width:200px;color:var(--serif-ink);outline:none}
+  .gate input:focus{border-color:var(--terra)}
+  .gate button{margin-top:24px;border:none;background:var(--terra);color:#fff;font-size:16px;
+    padding:12px 34px;border-radius:999px;cursor:pointer;letter-spacing:2px;box-shadow:0 8px 20px rgba(192,120,94,.35)}
+  .gate .err{color:var(--terra);font-size:14px;height:18px;margin-top:14px;opacity:0;transition:opacity .3s}
+  .gate.shake{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+  .music{position:fixed;top:16px;right:16px;z-index:60;width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(252,247,240,.8);backdrop-filter:blur(6px);
+    font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .6s}
+  .revealed .music{opacity:1}
+
+  section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:72px 24px;text-align:center;position:relative}
+  section:nth-of-type(even){background:var(--cream2)}
+  .label{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .h{font-size:25px;color:var(--serif-ink);font-weight:600;margin-bottom:20px;line-height:1.5}
+  .body{max-width:560px;font-size:16px;color:var(--ink);opacity:.9}
+  .rule{width:34px;height:2px;background:var(--terra);margin:22px auto}
+
+  .photo{width:min(78vw,400px);aspect-ratio:3/4;border-radius:16px;overflow:hidden;
+    box-shadow:0 18px 44px rgba(122,80,56,.22);margin:0 auto 26px}
+  .photo.wide{aspect-ratio:4/3;width:min(86vw,540px)}
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+  .ph{width:min(78vw,400px);aspect-ratio:3/4;border-radius:16px;margin:0 auto 26px;
+    border:2px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--muted);background:repeating-linear-gradient(45deg,#FBF3E9,#FBF3E9 12px,#F7EFE4 12px,#F7EFE4 24px)}
+  .ph .ic{font-size:30px;margin-bottom:8px}
+  .ph .t{font-size:13px;letter-spacing:1px;line-height:1.7}
+
+  .letters{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+  .letter{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .letter-img{width:min(42vw,220px);aspect-ratio:3/4;border-radius:12px;overflow:hidden;
+    box-shadow:0 14px 34px rgba(122,80,56,.24)}
+  .letter-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .cap{font-size:12px;color:var(--muted);letter-spacing:1px}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity 1s ease,transform 1s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+    color:var(--muted);font-size:13px;letter-spacing:2px;animation:bob 1.8s infinite}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+  /* Hero 全幅照片 */
+  #hero{padding:0;overflow:hidden}
+  #hero .heroimg{position:absolute;inset:0;z-index:0}
+  #hero .heroimg img{width:100%;height:100%;object-fit:cover}
+  #hero .ovl{position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg,rgba(252,247,240,.25),rgba(252,247,240,.55) 55%,rgba(252,247,240,.92))}
+  #hero .herotext{position:relative;z-index:2;margin-top:auto;margin-bottom:12vh}
+  #hero .eyebrow{font-size:12px;letter-spacing:6px;color:var(--terra);margin-bottom:16px}
+  #hero .title{font-size:40px;color:var(--serif-ink);font-weight:600;margin-bottom:12px}
+  #hero .sub{color:#6b5645;font-size:16px}
+
+  .counter{font-size:56px;color:var(--terra);font-weight:700;margin:8px 0}
+  .counter small{font-size:18px;color:var(--muted);font-weight:400}
+
+  #ask{background:radial-gradient(120% 120% at 50% 30%,#FFF7EE,#F0DCC8);overflow:hidden}
+  #ask .title{font-size:34px;color:var(--serif-ink);font-weight:700;margin-bottom:44px;line-height:1.5}
+  .btns{position:relative;width:100%;max-width:520px;height:130px;margin:0 auto}
+  .btn-yes{background:var(--terra);color:#fff;border:none;font-size:20px;padding:16px 46px;border-radius:999px;
+    cursor:pointer;box-shadow:0 10px 26px rgba(192,120,94,.4);letter-spacing:2px}
+  .btn-no{position:absolute;left:calc(50% + 90px);top:34px;background:#fff;color:var(--muted);border:1px solid var(--line);
+    font-size:15px;padding:12px 22px;border-radius:999px;cursor:pointer;transition:transform .18s ease,left .18s,top .18s}
+  .yes-wrap{position:absolute;left:calc(50% - 170px);top:30px}
+  .final{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:24px;background:radial-gradient(120% 120% at 50% 30%,#FFF7EE,#F0DCC8);
+    opacity:0;visibility:hidden;transition:opacity 1s ease}
+  .final.show{opacity:1;visibility:visible}
+  .final .photo{width:min(70vw,320px);margin-bottom:22px}
+  .final .line{font-size:26px;color:var(--serif-ink);line-height:1.6}
+  .petal{position:fixed;top:-40px;font-size:22px;z-index:60;pointer-events:none;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(112vh) rotate(360deg);opacity:.2}}
+
+  #next .cta{margin-top:8px;background:var(--serif-ink);color:#fff;border:none;font-size:17px;
+    padding:14px 34px;border-radius:999px;cursor:pointer;letter-spacing:2px;text-decoration:none;display:inline-block}
+  .draft{position:fixed;bottom:8px;left:8px;z-index:70;font-size:11px;color:var(--muted);
+    background:rgba(255,255,255,.7);padding:3px 8px;border-radius:6px}
+</style>
+</head>
+<body class="locked">
+
+  <div class="gate" id="gate">
+    <div class="heart">🤍</div>
+    <h1>这一页，只写给一个人</h1>
+    <p>先回答一个只有你知道的问题吧</p>
+    <div class="q serif">我们第一次见面，是哪一天？</div>
+    <input id="gateInput" inputmode="text" placeholder="例如 6.15" autocomplete="off">
+    <div class="err" id="gateErr">再想想～就是你后来赖上我的那天 😏</div>
+    <button id="gateBtn">进 来 看 看</button>
+  </div>
+
+  <button class="music" id="music" title="背景音乐">🎵</button>
+  <div class="draft">文案为初稿 · 可随时改</div>
+
+  <!-- ① Hero -->
+  <section id="hero">
+    <div class="heroimg"><img src="{{IMG_HERO}}" alt=""></div>
+    <div class="ovl"></div>
+    <div class="herotext reveal">
+      <div class="eyebrow">FOR 朱高洁</div>
+      <div class="title serif">亲爱的小胖猪</div>
+      <div class="sub">有些话，我想认真地、从头讲给你听。</div>
+    </div>
+    <div class="scroll-hint">↓ 往下滑</div>
+  </section>
+
+  <!-- ② 缘起 6.15 -->
+  <section>
+    <div class="ph reveal"><div class="ic">🖼️</div><div class="t">这一天的照片，正在找……<br>先留个位置给它</div></div>
+    <div class="reveal">
+      <div class="label">2025.6.15 · 我们的第一天</div>
+      <div class="h serif">从小红书的一句「你好」开始</div>
+      <div class="rule"></div>
+      <div class="body">谁能想到呢——在小红书上滑到你，我鼓起勇气打了声招呼，然后就有了 6 月 15 号那次见面。那天之后，我脑子里只剩一个念头：还想再见你。</div>
+    </div>
+  </section>
+
+  <!-- ③ 在一起 6.20 -->
+  <section>
+    <div class="reveal">
+      <div class="label">2025.6.20 · 在一起</div>
+      <div class="h serif">然后，你就赖上我啦</div>
+      <div class="counter" id="counter">0 <small>天</small></div>
+      <div class="body">从那天起，我的每一天都有了固定的主角。</div>
+    </div>
+  </section>
+
+  <!-- ④a 西湖边 9.21 -->
+  <section>
+    <div class="photo reveal"><img src="{{IMG_XIHU}}" alt=""></div>
+    <div class="reveal">
+      <div class="label">2025.9.21 · 西湖边</div>
+      <div class="h serif">你偷亲我的那天</div>
+      <div class="rule"></div>
+      <div class="body">西湖边的风，还有你凑过来的那一下。我假装淡定，其实心跳得像擂鼓——那一刻我就知道，这个人我认定了。</div>
+    </div>
+  </section>
+
+  <!-- ④b 横店 9.28 -->
+  <section>
+    <div class="photo reveal"><img src="{{IMG_HENGDIAN}}" alt=""></div>
+    <div class="reveal">
+      <div class="label">2025.9.28 · 横店</div>
+      <div class="h serif">著名的「大摆锤事件」</div>
+      <div class="rule"></div>
+      <div class="body">还记得那个大摆锤吗？我到现在都记得那颗差点被甩出去的心脏。从那天起，我们光荣地、一致地告别了所有刺激类项目——谢谢你，愿意陪我一起怂。</div>
+    </div>
+  </section>
+
+  <!-- ④c 乌镇月老 11.8 -->
+  <section>
+    <div class="photo reveal"><img src="{{IMG_YUELAO}}" alt=""></div>
+    <div class="reveal">
+      <div class="label">2025.11.8 · 乌镇</div>
+      <div class="h serif">我一个人，去替我们拜了月老</div>
+      <div class="rule"></div>
+      <div class="body">那天我一个人去了乌镇，偷偷给月老上了香，替我们许了个愿。谢谢它，把你从小红书那头，一路牵到我身边——原来"喜结良缘"这四个字，说的就是我们。</div>
+    </div>
+  </section>
+
+  <!-- ⑤ 手写信 -->
+  <section>
+    <div class="letters reveal">
+      <div class="letter"><div class="letter-img"><img src="{{IMG_LETTER1}}" alt=""></div><div class="cap">生日 · 2025.12.23</div></div>
+      <div class="letter"><div class="letter-img"><img src="{{IMG_LETTER2}}" alt=""></div><div class="cap">情人节 · 2026.2.14</div></div>
+    </div>
+    <div class="reveal">
+      <div class="label">你写给我的信</div>
+      <div class="h serif">我们也会闹脾气，<br>但你总愿意好好把话写下来</div>
+      <div class="rule"></div>
+      <div class="body">我们也吵过架。可每次我笨嘴拙舌讲不清的时候，你会安静地把心里话写成信——我生日一封，情人节一封。那两封信我一直留着。它们让我明白：愿意好好沟通的两个人，什么坎都过得去。</div>
+    </div>
+  </section>
+
+  <!-- ⑥ 打动 -->
+  <section>
+    <div class="photo reveal"><img src="{{IMG_MOVE}}" alt=""></div>
+    <div class="reveal">
+      <div class="label">你最打动我的地方</div>
+      <div class="h serif">是你的理解，和包容</div>
+      <div class="rule"></div>
+      <div class="body">我不是最会说话、最浪漫的那种人，可你总是懂我，也总能包容我的笨拙。和你在一起，我可以做最放松的自己。这一点，胜过所有。</div>
+    </div>
+  </section>
+
+  <!-- ⑦ 铺垫 -->
+  <section>
+    <div class="reveal">
+      <div class="h serif" style="font-size:24px">说了这么多，<br>其实我只想问你一件事。</div>
+      <div class="scroll-hint" style="position:static;margin-top:30px">↓</div>
+    </div>
+  </section>
+
+  <!-- ⑧ 求婚 -->
+  <section id="ask">
+    <div class="photo reveal" style="width:min(64vw,300px)"><img src="{{IMG_ASK}}" alt=""></div>
+    <div class="reveal"><div class="title serif">朱高洁，<br>嫁给我好吗？</div></div>
+    <div class="btns" id="btns">
+      <div class="yes-wrap"><button class="btn-yes" id="btnYes">我 愿 意 💍</button></div>
+      <button class="btn-no" id="btnNo">让我再想想 🤔</button>
+    </div>
+  </section>
+
+  <!-- ⑨ 成功高潮（覆盖全屏） -->
+  <div class="final" id="final">
+    <div class="photo"><img src="{{IMG_XIUHE}}" alt=""></div>
+    <div class="line serif">那……余生请多指教，<br>我的小胖猪 💍</div>
+  </div>
+
+  <!-- ⑩ 下一步 -->
+  <section id="next">
+    <div class="photo reveal"><img src="{{IMG_LOOKUP}}" alt=""></div>
+    <div class="reveal">
+      <div class="label">现在</div>
+      <div class="h serif">抬起头，然后——</div>
+      <a class="cta" href="tel:10086">打电话给我 📞</a>
+      <div class="body" style="margin-top:20px;font-size:14px;color:var(--muted)">（这里之后换成你想留的悄悄话或下一站线索）</div>
+    </div>
+  </section>
+
+<script>
+  var gate=document.getElementById('gate'),input=document.getElementById('gateInput'),
+      err=document.getElementById('gateErr'),btn=document.getElementById('gateBtn');
+  function norm(s){return (s||'').replace(/\s|年|月|日|\.|\/|-/g,'').toLowerCase()}
+  var answers=['615','0615','20250615','6月15','六月十五'];
+  function tryEnter(){
+    var ok=answers.some(function(a){return norm(input.value)===norm(a)});
+    if(ok){gate.classList.add('open');document.body.classList.remove('locked');
+      document.body.classList.add('revealed');
+      setTimeout(function(){gate.style.display='none'},900);kickReveal();
+    }else{err.style.opacity=1;gate.classList.add('shake');
+      setTimeout(function(){gate.classList.remove('shake')},400);}
+  }
+  btn.onclick=tryEnter;
+  input.addEventListener('keydown',function(e){if(e.key==='Enter')tryEnter()});
+
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');
+      if(en.target.querySelector&&en.target.querySelector('#counter'))runCounter();}})
+  },{threshold:.18});
+  function kickReveal(){document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)})}
+
+  var counterDone=false;
+  function runCounter(){
+    if(counterDone)return;counterDone=true;
+    var start=new Date(2025,5,20); // 2025-06-20
+    var days=Math.floor((Date.now()-start.getTime())/86400000);
+    var el=document.getElementById('counter'),n=0,step=Math.max(1,Math.floor(days/40));
+    var t=setInterval(function(){n+=step;if(n>=days){n=days;clearInterval(t)}
+      el.innerHTML=n+' <small>天</small>'},22);
+  }
+  document.addEventListener('scroll',function(){
+    var c=document.getElementById('counter');if(!c)return;
+    var r=c.getBoundingClientRect();if(r.top<innerHeight*.8&&r.bottom>0)runCounter();
+  });
+
+  var no=document.getElementById('btnNo'),yes=document.getElementById('btnYes'),
+      finalBox=document.getElementById('final'),asked=document.getElementById('ask');
+  var texts=['让我再想想 🤔','不许点这个 🙈','再想想也是愿意呀','这个按钮坏掉啦','你追不到我的~','认命吧宝贝 💗'];
+  var ti=0;
+  function dodge(e){if(e)e.preventDefault();
+    var w=asked.clientWidth,h=asked.clientHeight;
+    no.style.left=(40+Math.random()*(w-160))+'px';
+    no.style.top=(90+Math.random()*(h-220))+'px';
+    no.style.transform='scale('+(0.9-Math.min(ti*0.06,0.4))+')';
+    ti++;no.textContent=texts[ti%texts.length];}
+  no.addEventListener('mouseenter',dodge);
+  no.addEventListener('touchstart',dodge,{passive:false});
+  no.addEventListener('click',dodge);
+
+  yes.addEventListener('click',function(){finalBox.classList.add('show');petals();});
+  function petals(){var em=['🌸','💗','🤍','💍','🌷'];
+    for(var i=0;i<70;i++){(function(i){setTimeout(function(){
+      var s=document.createElement('span');s.className='petal';s.textContent=em[i%em.length];
+      s.style.left=Math.random()*100+'vw';s.style.fontSize=(16+Math.random()*18)+'px';
+      s.style.animationDuration=(3+Math.random()*3)+'s';
+      document.body.appendChild(s);setTimeout(function(){s.remove()},6500);},i*55)})(i)}}
+
+  var music=document.getElementById('music'),on=false;
+  music.onclick=function(){on=!on;music.textContent=on?'🔊':'🎵';music.style.background=on?'#F3E4D2':'';};
+</script>
+</body>
+</html>

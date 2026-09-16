@@ -1,0 +1,19 @@
+# macOS / 编辑器
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# 临时 / 日志
+*.tmp
+*.log
+
+# 私人原图：正式站点的压缩图会随站点公开，但原始高清与本地私人相册不入库
+/assets/img/originals/
+
+# 内部设计文档：含私人信息与「入场门非真加密」说明，勿随公开仓库发布（见 docs/design.md §9）
+/docs/
+
+# 原型产物：内联了真实照片，公开仓库暂不入库（可由 prototype/build_prototype.py 重新生成）
+/prototype/prototype.html
