@@ -29,10 +29,15 @@ export function initProposal() {
   let ti = 0;
   function dodge(e) {
     if (e) e.preventDefault();
-    const w = asked.clientWidth;
-    const h = asked.clientHeight;
-    no.style.left = (40 + Math.random() * Math.max(0, w - 160)) + 'px';
-    no.style.top = (90 + Math.random() * Math.max(0, h - 220)) + 'px';
+    // 以按钮自身的定位容器（.btns）为基准并 clamp 在其中：既不会飞出被 #ask 裁剪掉，
+    // 又把横向限制在右半侧，避免盖住"我愿意"。
+    const box = no.offsetParent || asked;
+    const w = box.clientWidth;
+    const h = box.clientHeight;
+    const maxX = Math.max(0, w - no.offsetWidth);
+    const minX = Math.min(maxX, w / 2);
+    no.style.left = (minX + Math.random() * (maxX - minX)) + 'px';
+    no.style.top = (Math.random() * Math.max(0, h - no.offsetHeight)) + 'px';
     no.style.transform = 'scale(' + (0.9 - Math.min(ti * 0.06, 0.4)) + ')';
     ti += 1;
     no.textContent = DODGE_TEXTS[ti % DODGE_TEXTS.length];
