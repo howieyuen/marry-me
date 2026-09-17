@@ -42,7 +42,6 @@ SPEC = [
     ("{{IMG_MOVE}}",     SC,   "高尔夫",    0),  # close-up portrait (the "what moved me" chapter)
     ("{{IMG_ASK}}",      SC,   "求婚",      0),  # down on one knee with the ring
     ("{{IMG_XIUHE}}",    SC,   "秀禾",      0),  # success climax
-    ("{{IMG_LOOKUP}}",   SC,   "抬起头",    0),  # ending: he holds the flowers
 ]
 
 

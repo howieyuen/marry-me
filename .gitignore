@@ -1,19 +1,22 @@
-# macOS / 编辑器
+# macOS / editors
 .DS_Store
 Thumbs.db
 *.swp
 .idea/
 .vscode/
 
-# 临时 / 日志
+# Temporary / logs
 *.tmp
 *.log
 
-# 私人原图：正式站点的压缩图会随站点公开，但原始高清与本地私人相册不入库
+# Private originals: the compressed images ship with the site, the full-resolution
+# shots and the local private album never enter the repo
 /assets/img/originals/
 
-# 内部设计文档：含私人信息与「入场门非真加密」说明，勿随公开仓库发布（见 docs/design.md §9）
+# Internal design notes: contain private details and the "the entry gate is not real
+# encryption" caveat, so they must not ship with a public repo (see docs/design.md §9)
 /docs/
 
-# 原型产物：内联了真实照片，公开仓库暂不入库（可由 prototype/build_prototype.py 重新生成）
+# Prototype output: inlines the real photos, kept out of the public repo
+# (regenerate with prototype/build_prototype.py)
 /prototype/prototype.html

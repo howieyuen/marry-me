@@ -1,37 +1,38 @@
 name: Test & Deploy to GitHub Pages
 
-# 触发时机：
-# - push 到 main：先跑单测，通过后自动部署上线（⚠️ push 即上线，是防剧透的关键动作）
-# - 手动触发：Actions 页面 → 本 workflow → Run workflow
+# Triggers:
+# - push to main: run the unit tests first, then publish (⚠️ a push goes live — this is the
+#   step that decides when the surprise becomes readable)
+# - manual: Actions tab → this workflow → Run workflow
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-# GitHub Pages 部署所需的最小权限
+# Least privilege needed to deploy to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 避免并发部署互相打架；不取消进行中的部署
+# One deployment at a time; never cancel one that is already running
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  # ① 单测：不通过就不部署
+  # ① Tests: no deploy unless they pass
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24' # 与本地一致；Node 24 自动识别 ESM，无需 package.json
+          node-version: '24' # matches local; Node 24 detects ESM without a package.json
       - name: Run unit tests
         run: node --test "tests/**/*.test.js"
 
-  # ② 部署：依赖 test 成功
+  # ② Deploy: only after test succeeds
   deploy:
     needs: test
     runs-on: ubuntu-latest
@@ -44,7 +45,7 @@ jobs:
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: . # 整个仓库根目录作为静态站点（.nojekyll 已关闭 Jekyll 处理）
+          path: . # the repo root is the site (.nojekyll already turns Jekyll processing off)
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
