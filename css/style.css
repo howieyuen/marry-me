@@ -48,7 +48,7 @@ section:nth-of-type(even){background:var(--cream2)}
 
 .letters{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
 .letter{display:flex;flex-direction:column;align-items:center;gap:8px}
-.letter-img{width:min(42vw,220px);aspect-ratio:3/4;border-radius:12px;overflow:hidden;
+.letter-img{width:min(40vw,220px);aspect-ratio:3/4;border-radius:12px;overflow:hidden;
   box-shadow:0 14px 34px rgba(122,80,56,.24)}
 .letter-img img{width:100%;height:100%;object-fit:cover;display:block}
 .cap{font-size:12px;color:var(--muted);letter-spacing:1px}
@@ -70,6 +70,7 @@ section:nth-of-type(even){background:var(--cream2)}
 #hero .eyebrow{font-size:12px;letter-spacing:6px;color:var(--terra);margin-bottom:16px}
 #hero .title{font-size:40px;color:var(--serif-ink);font-weight:600;margin-bottom:12px}
 #hero .sub{color:#6b5645;font-size:16px}
+#hero .scroll-hint{color:#8A6B52}
 
 .counter{font-size:56px;color:var(--terra);font-weight:700;margin:8px 0}
 .counter small{font-size:18px;color:var(--muted);font-weight:400}
@@ -78,16 +79,26 @@ section:nth-of-type(even){background:var(--cream2)}
 #ask .title{font-size:34px;color:var(--serif-ink);font-weight:700;margin-bottom:44px;line-height:1.5}
 .btns{position:relative;width:100%;max-width:520px;height:130px;margin:0 auto}
 .btn-yes{background:var(--terra);color:#fff;border:none;font-size:20px;padding:16px 46px;border-radius:999px;
-  cursor:pointer;box-shadow:0 10px 26px rgba(192,120,94,.4);letter-spacing:2px}
+  white-space:nowrap;cursor:pointer;box-shadow:0 10px 26px rgba(192,120,94,.4);letter-spacing:2px}
 .btn-no{position:absolute;left:calc(50% + 90px);top:34px;background:#fff;color:var(--muted);border:1px solid var(--line);
-  font-size:15px;padding:12px 22px;border-radius:999px;cursor:pointer;transition:transform .18s ease,left .18s,top .18s}
+  font-size:15px;padding:12px 22px;border-radius:999px;white-space:nowrap;cursor:pointer;transition:transform .18s ease,left .18s,top .18s}
 .yes-wrap{position:absolute;left:calc(50% - 170px);top:30px}
+/* Narrow screens can't fit both buttons on one row, so stack them */
+@media (max-width:480px){
+  .btns{height:180px}
+  .yes-wrap{left:0;right:0;top:6px;display:flex;justify-content:center}
+  .btn-no{left:auto;right:6px;top:110px}
+}
 .final{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:24px;background:radial-gradient(120% 120% at 50% 30%,#FFF7EE,#F0DCC8);
   opacity:0;visibility:hidden;transition:opacity 1s ease}
 .final.show{opacity:1;visibility:visible}
 .final .photo{width:min(70vw,320px);margin-bottom:22px}
 .final .line{font-size:26px;color:var(--serif-ink);line-height:1.6}
+.final-hint{margin-top:34px;color:var(--muted);font-size:14px;letter-spacing:2px;
+  opacity:0;transition:opacity 1s ease;animation:bob2 1.8s infinite}
+.final-hint.in{opacity:1}
+@keyframes bob2{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 .petal{position:fixed;top:-40px;font-size:22px;z-index:60;pointer-events:none;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(112vh) rotate(360deg);opacity:.2}}
 

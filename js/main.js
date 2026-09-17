@@ -20,7 +20,7 @@ function runCounter() {
   }, 22);
 }
 
-function setupGate() {
+function setupGate(startMusic) {
   const gate = document.getElementById('gate');
   const input = document.getElementById('gateInput');
   const err = document.getElementById('gateErr');
@@ -32,6 +32,8 @@ function setupGate() {
     document.body.classList.add('revealed');
     setTimeout(() => { gate.style.display = 'none'; }, 900);
     initReveal({ onCounter: runCounter });
+    // Answering the gate is the user gesture browsers require before audio may play.
+    startMusic();
   }
   function tryEnter() {
     if (matchAnswer(input.value, GATE_ANSWERS)) {
@@ -57,8 +59,7 @@ function setupCounterScrollFallback() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  setupGate();
+  setupGate(initMusic());
   setupCounterScrollFallback();
   initProposal();
-  initMusic();
 });
