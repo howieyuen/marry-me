@@ -71,6 +71,9 @@ export function initProposal() {
   yes.addEventListener('click', () => {
     finalBox.classList.add('show');
     petals();
+    // Kept hidden until now so she can't scroll ahead and read the ending before answering.
+    const next = document.getElementById('next');
+    if (next) next.classList.add('unlocked');
     // The overlay is fixed and would otherwise hide the closing section forever, so it only invites
     // her onward once the climax has had a few seconds to land.
     const hint = document.getElementById('finalHint');
@@ -78,7 +81,7 @@ export function initProposal() {
       if (hint) hint.classList.add('in');
       finalBox.addEventListener('click', () => {
         finalBox.classList.remove('show');
-        document.getElementById('next').scrollIntoView({ behavior: 'smooth' });
+        if (next) next.scrollIntoView({ behavior: 'smooth' });
       }, { once: true });
     }, 4000);
   });

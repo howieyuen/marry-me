@@ -9,17 +9,20 @@ export function heartPoint(t) {
   };
 }
 
-export function heartPath(steps = 140) {
+// Both halves start at the top notch (t=0) and end at the bottom tip (t=±PI), so they can be
+// stroked outward at the same time. Left over unclosed, their fills meet along the vertical axis.
+export function heartHalfPath(dir, steps = 70) {
   const pts = [];
-  for (let i = 0; i < steps; i++) {
-    const { x, y } = heartPoint((i / steps) * Math.PI * 2);
+  for (let i = 0; i <= steps; i += 1) {
+    const { x, y } = heartPoint(dir * (i / steps) * Math.PI);
     pts.push(`${x.toFixed(2)} ${y.toFixed(2)}`);
   }
-  return `M${pts.join('L')}Z`;
+  return `M${pts.join('L')}`;
 }
 
 export function initHeart() {
-  const path = document.getElementById('heartPath');
-  if (!path) return;
-  path.setAttribute('d', heartPath());
+  const left = document.getElementById('heartL');
+  const right = document.getElementById('heartR');
+  if (left) left.setAttribute('d', heartHalfPath(-1));
+  if (right) right.setAttribute('d', heartHalfPath(1));
 }

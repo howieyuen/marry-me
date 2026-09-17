@@ -27,7 +27,6 @@ SPEC = [
     ("move-golf.jpg",       SC,   "高尔夫",    True),
     ("ask-proposal.jpg",    SC,   "求婚",      True),
     ("xiuhe.jpg",           SC,   "秀禾",      True),
-    ("lookup.jpg",          SC,   "抬起头",    True),
     ("meet-0615.jpg",       SC,   "线上认识",  True),  # 6.15 origin: her first photo sent over Xiaohongshu
 ]
 

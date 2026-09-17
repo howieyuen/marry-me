@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { heartPoint, heartPath } from '../js/heart.js';
+import { heartPoint, heartHalfPath } from '../js/heart.js';
 
 test('t=0 sits at the notch between the two lobes', () => {
   const { x, y } = heartPoint(0);
@@ -31,9 +31,27 @@ test('curve stays inside the SVG viewBox', () => {
   }
 });
 
-test('path is a closed polyline with one point per step', () => {
-  const d = heartPath(8);
-  assert.match(d, /^M/);
-  assert.match(d, /Z$/);
-  assert.equal(d.slice(1, -1).split('L').length, 8);
+test('each half is an open polyline from the notch to the tip', () => {
+  const d = heartHalfPath(1, 8);
+  assert.match(d, /^M0.00 -5.00L/);
+  assert.doesNotMatch(d, /Z/);
+  assert.equal(d.slice(1).split('L').length, 9);
+  assert.match(d, /L0.00 17.00$/);
+});
+
+test('the two halves mirror each other point for point', () => {
+  const l = heartHalfPath(-1, 12).slice(1).split('L');
+  const r = heartHalfPath(1, 12).slice(1).split('L');
+  assert.equal(l.length, r.length);
+  l.forEach((pt, i) => {
+    const [lx, ly] = pt.split(' ').map(Number);
+    const [rx, ry] = r[i].split(' ').map(Number);
+    assert.ok(Math.abs(lx + rx) < 1e-9, `x not mirrored at ${i}: ${lx} / ${rx}`);
+    assert.equal(ly, ry);
+  });
+});
+
+test('the right half stays on the right of the axis', () => {
+  const pts = heartHalfPath(1, 60).slice(1).split('L');
+  pts.forEach((pt) => assert.ok(Number(pt.split(' ')[0]) >= 0, `x went negative: ${pt}`));
 });
