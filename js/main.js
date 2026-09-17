@@ -3,6 +3,7 @@ import { daysSince, TOGETHER_START } from './counter.js';
 import { initReveal } from './reveal.js';
 import { initProposal } from './proposal.js';
 import { initMusic } from './music.js';
+import { initHeart } from './heart.js';
 
 let counterDone = false;
 function runCounter() {
@@ -59,6 +60,7 @@ function setupCounterScrollFallback() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  initHeart();
   setupGate(initMusic());
   setupCounterScrollFallback();
   initProposal();
