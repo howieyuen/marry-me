@@ -46,12 +46,6 @@ section:nth-of-type(even){background:var(--cream2)}
 .photo.wide{aspect-ratio:4/3;width:min(86vw,540px)}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
 
-.ph{width:min(78vw,400px);aspect-ratio:3/4;border-radius:16px;margin:0 auto 26px;
-  border:2px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;
-  color:var(--muted);background:repeating-linear-gradient(45deg,#FBF3E9,#FBF3E9 12px,#F7EFE4 12px,#F7EFE4 24px)}
-.ph .ic{font-size:30px;margin-bottom:8px}
-.ph .t{font-size:13px;letter-spacing:1px;line-height:1.7}
-
 .letters{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
 .letter{display:flex;flex-direction:column;align-items:center;gap:8px}
 .letter-img{width:min(42vw,220px);aspect-ratio:3/4;border-radius:12px;overflow:hidden;

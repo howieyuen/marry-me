@@ -28,7 +28,7 @@ SPEC = [
     ("ask-proposal.jpg",    SC,   "求婚",      True),
     ("xiuhe.jpg",           SC,   "秀禾",      True),
     ("lookup.jpg",          SC,   "抬起头",    True),
-    # 6.15 "Day One" photo still missing: once obtained, add a line ("meet-0615.jpg", SC, "第一天", True)
+    ("meet-0615.jpg",       SC,   "线上认识",  True),  # 6.15 origin: her first photo sent over Xiaohongshu
 ]
 
 
