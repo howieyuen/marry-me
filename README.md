@@ -1,54 +1,54 @@
 # marriage-proposal
 
-一封「会滚动的电子情书」求婚静态网页，部署于 GitHub Pages，通过私密链接发送给女方，她独自打开后随滚动读完两人的故事，最终落到求婚一刻。
+A scroll-driven "electronic love letter" — a static single-page marriage-proposal site, hosted on GitHub Pages and shared through a private link. She opens it alone and, as she scrolls, reads our story section by section, building up to the proposal.
 
-- 仓库：`howieyuen/marriage-proposal`
-- 站点：`https://howieyuen.github.io/marriage-proposal/`
+- Repo: `howieyuen/marriage-proposal`
+- Site: `https://howieyuen.github.io/marriage-proposal/`
 
-## 目录结构
+## Structure
 
 ```
-index.html            页面结构：入场门 + 10 章节 + 成功层 + 结尾
-css/style.css         视觉系统与布局（清透暖调）
+index.html            Page structure: entry gate + 10 sections + success overlay + ending
+css/style.css         Visual system & layout (clean warm tone)
 js/
-  gate.js             入场门答案规范化 / 匹配（含单测）
-  counter.js          在一起天数计算（含单测）
-  reveal.js           IntersectionObserver 滚动淡入
-  proposal.js         求婚按钮：躲避 + 我愿意 → 成功层 + 花瓣
-  music.js            背景音乐开关
-  main.js             入口装配
-tests/                node --test 单测（gate / counter）
-scripts/optimize.py   从本地私人相册用 sips 生成 assets/img（独立压缩图）
-assets/img/           压缩后的照片（随站点公开）
+  gate.js             Entry-gate answer normalization / matching (unit-tested)
+  counter.js          "Days together" calculation (unit-tested)
+  reveal.js           IntersectionObserver scroll fade-in
+  proposal.js         Proposal buttons: dodging "no" + "yes" -> success overlay + petals
+  music.js            Background-music toggle
+  main.js             Entry wiring
+tests/                node --test unit tests (gate / counter)
+scripts/optimize.py   Generate assets/img from a local private album via sips (standalone compressed files)
+assets/img/           Compressed photos (published with the site)
 robots.txt / .nojekyll
-prototype/            交互原型（brainstorm 阶段产物，仅供参考）
+prototype/            Interactive prototype (brainstorm-phase artifact, reference only)
 ```
 
-> 设计文档与开发计划在本地 `docs/`（`design.md` / `plan.md`），含私人信息，已通过 `.gitignore` 排除，不随公开仓库发布。
+> The design doc and implementation plan live locally under `docs/` (`design.md` / `plan.md`). They contain private information and are excluded via `.gitignore` — never published with the public repo.
 
-## 本地预览
+## Local preview
 
-ES Module 需经 http 访问（`file://` 会被浏览器 CORS 拦截）：
+ES modules must be served over http (`file://` is blocked by browser CORS):
 
 ```bash
 python3 -m http.server 8000
-# 浏览器打开 http://localhost:8000/
+# open http://localhost:8000/
 ```
 
-## 测试
+## Tests
 
 ```bash
-node --test        # 纯逻辑单测（gate / counter），零依赖，需 Node ≥ 18
+node --test        # pure-logic unit tests (gate / counter), zero deps, Node >= 18
 ```
 
-## 重新生成图片
+## Regenerate images
 
 ```bash
-python3 scripts/optimize.py    # 读取 ~/privacy/{婚纱,素材}，输出 assets/img/*.jpg
+python3 scripts/optimize.py    # reads ~/privacy/{婚纱,素材}, writes assets/img/*.jpg
 ```
 
-> 原始高清图与 `~/privacy` **不入库**，仅提交压缩图。
+> Original full-resolution photos and `~/privacy` are **not committed** — only compressed images ship.
 
-## 隐私
+## Privacy
 
-GitHub Pages 为公开托管，入场门只是前端小机关、**非真正加密**（足以防无关的人误看，但勿当安全边界）。不主动扩散链接即可。
+GitHub Pages is public hosting; the entry gate is just a front-end trick, **not real encryption** (enough to keep unrelated people from stumbling in, but not a security boundary). Simply don't spread the link.
