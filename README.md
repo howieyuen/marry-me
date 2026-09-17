@@ -1,9 +1,9 @@
-# marriage-proposal
+# marry-me
 
-A scroll-driven "electronic love letter" — a static single-page marriage-proposal site, hosted on GitHub Pages and shared through a private link. She opens it alone and, as she scrolls, reads our story section by section, building up to the proposal.
+A scroll-driven "electronic love letter" — a static single-page proposal site, hosted on GitHub Pages and shared through a private link. She opens it alone and, as she scrolls, reads our story section by section, building up to the proposal.
 
-- Repo: `howieyuen/marriage-proposal`
-- Site: `https://howieyuen.github.io/marriage-proposal/`
+- Repo: `howieyuen/marry-me`
+- Site: `https://howieyuen.github.io/marry-me/`
 
 ## Structure
 
