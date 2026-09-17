@@ -7,3 +7,8 @@ export function daysSince(start, now) {
 
 // Start of "together": 2025-06-20 (local)
 export const TOGETHER_START = new Date(2025, 5, 20);
+
+// She may leave the page open, so the day count has to roll over on its own.
+export function msUntilNextLocalMidnight(now) {
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1) - now;
+}

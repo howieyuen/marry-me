@@ -1,11 +1,15 @@
 import { matchAnswer, GATE_ANSWERS } from './gate.js';
-import { daysSince, TOGETHER_START } from './counter.js';
+import { daysSince, msUntilNextLocalMidnight, TOGETHER_START } from './counter.js';
 import { initReveal } from './reveal.js';
 import { initProposal } from './proposal.js';
 import { initMusic } from './music.js';
 import { initHeart } from './heart.js';
 
 let counterDone = false;
+function renderCounter(el, days) {
+  el.innerHTML = days + ' <small>天</small>';
+}
+
 function runCounter() {
   if (counterDone) return;
   const el = document.getElementById('counter');
@@ -17,8 +21,23 @@ function runCounter() {
   const t = setInterval(() => {
     n += step;
     if (n >= days) { n = days; clearInterval(t); }
-    el.innerHTML = n + ' <small>天</small>';
+    renderCounter(el, n);
   }, 22);
+}
+
+// The count-up only runs once, so without this the number would stay frozen at whatever it was
+// when the page loaded — wrong by a day if she leaves it open overnight or comes back later.
+function keepCounterFresh() {
+  const el = document.getElementById('counter');
+  if (!el) return;
+  const sync = () => { if (counterDone) renderCounter(el, daysSince(TOGETHER_START, new Date())); };
+  // a timer can fire a hair early, so land just after midnight rather than exactly on it
+  const scheduleRollover = () => setTimeout(() => {
+    sync();
+    scheduleRollover();
+  }, msUntilNextLocalMidnight(new Date()) + 1000);
+  scheduleRollover();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) sync(); });
 }
 
 function setupGate(startMusic) {
@@ -63,5 +82,6 @@ window.addEventListener('DOMContentLoaded', () => {
   initHeart();
   setupGate(initMusic());
   setupCounterScrollFallback();
+  keepCounterFresh();
   initProposal();
 });
