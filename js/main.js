@@ -46,7 +46,7 @@ function setupGate() {
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryEnter(); });
 }
 
-// 兜底：某些浏览器 IO 阈值边界下，滚动时也尝试触发计数器
+// Fallback: on some browsers, IntersectionObserver threshold edge cases mean the counter should also be triggered on scroll
 function setupCounterScrollFallback() {
   document.addEventListener('scroll', () => {
     const c = document.getElementById('counter');

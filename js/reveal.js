@@ -1,4 +1,4 @@
-// 滚动进入视口时给 .reveal 加 .in；计数器元素进入时回调 onCounter
+// Add .in to .reveal elements as they scroll into view; call onCounter when the counter element enters
 export function initReveal({ onCounter } = {}) {
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => {

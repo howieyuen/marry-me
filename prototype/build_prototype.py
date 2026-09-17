@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""原型构建脚本（prototype 阶段）。
+"""Prototype build script (prototype phase).
 
-从本地私人相册（~/privacy/{婚纱,素材}）读取真实照片，用 macOS 自带的 sips
-压缩转码后 base64 内联进 prototype.template.html，生成可单文件预览的
-prototype.html。
+Reads real photos from the local private photo album (~/privacy/{婚纱,素材}), uses macOS's
+built-in sips to compress/transcode them, then inlines them as base64 into
+prototype.template.html, producing a single-file-previewable prototype.html.
 
-注意：这是原型期工具，正式站点会改用 scripts/optimize.py 生成独立图片文件，
-不再内联（见 docs/design.md §7 / §8）。
+Note: this is a prototype-phase tool; the production site will switch to scripts/optimize.py to
+generate standalone image files instead of inlining (see docs/design.md §7 / §8).
 """
 import base64
 import os
@@ -15,8 +15,8 @@ import sys
 import tempfile
 
 HOME = os.path.expanduser("~")
-GOWN = os.path.join(HOME, "privacy", "婚纱")   # 婚纱棚拍
-SC = os.path.join(HOME, "privacy", "素材")      # 故事素材（真实场景 + 手写信）
+GOWN = os.path.join(HOME, "privacy", "婚纱")   # wedding dress studio shoot
+SC = os.path.join(HOME, "privacy", "素材")      # story material (real-life scenes + handwritten letters)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE = os.path.join(HERE, "prototype.template.html")
@@ -24,25 +24,25 @@ OUT = os.path.join(HERE, "prototype.html")
 
 
 def find_by(dirpath, keyword):
-    """按关键词在目录里匹配文件名，规避 macOS Unicode 规范化问题。"""
+    """Match filenames in a directory by keyword, working around macOS Unicode normalization quirks."""
     for name in sorted(os.listdir(dirpath)):
         if keyword in name:
             return os.path.join(dirpath, name)
     return None
 
 
-# token -> (目录, 关键词, 顺时针旋转角度)
+# token -> (dir, keyword, clockwise rotation angle)
 SPEC = [
-    ("{{IMG_HERO}}",     GOWN, "1B9A2276", 0),  # 绿纱外景（用作 Hero）
+    ("{{IMG_HERO}}",     GOWN, "1B9A2276", 0),  # green dress outdoor shot (used as Hero)
     ("{{IMG_XIHU}}",     SC,   "西湖",      0),
     ("{{IMG_HENGDIAN}}", SC,   "横店",      0),
     ("{{IMG_YUELAO}}",   SC,   "月老",      0),
-    ("{{IMG_LETTER1}}",  SC,   "生日",      0),  # 2025.12.23 生日手写信
-    ("{{IMG_LETTER2}}",  SC,   "情人节",    0),  # 2026.2.14 情人节手写信
-    ("{{IMG_MOVE}}",     SC,   "高尔夫",    0),  # 人物特写（打动那章）
-    ("{{IMG_ASK}}",      SC,   "求婚",      0),  # 单膝跪地戴戒指
-    ("{{IMG_XIUHE}}",    SC,   "秀禾",      0),  # 成功高潮
-    ("{{IMG_LOOKUP}}",   SC,   "抬起头",    0),  # 结尾：他捧花
+    ("{{IMG_LETTER1}}",  SC,   "生日",      0),  # 2025.12.23 birthday handwritten letter
+    ("{{IMG_LETTER2}}",  SC,   "情人节",    0),  # 2026.2.14 Valentine's Day handwritten letter
+    ("{{IMG_MOVE}}",     SC,   "高尔夫",    0),  # close-up portrait (the "what moved me" chapter)
+    ("{{IMG_ASK}}",      SC,   "求婚",      0),  # down on one knee with the ring
+    ("{{IMG_XIUHE}}",    SC,   "秀禾",      0),  # success climax
+    ("{{IMG_LOOKUP}}",   SC,   "抬起头",    0),  # ending: he holds the flowers
 ]
 
 
@@ -64,7 +64,7 @@ def data_uri(src_path, rotate=0):
         args = ["sips", "-s", "format", "jpeg"]
         if rotate:
             args += ["-r", str(rotate)]
-        # 长边压到 1000px，JPEG 质量 ~62（HEIC/JPG 通吃）
+        # cap the long edge at 1000px, JPEG quality ~62 (handles both HEIC/JPG)
         args += ["-Z", "1000", "--setProperty", "formatOptions", "62",
                  src_path, "-o", tmp]
         subprocess.run(args, check=True,

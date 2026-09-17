@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""从本地私人相册生成站点用的压缩图（独立文件，非内联）。
+"""Generate compressed images for the site from the local private photo album (standalone files, not inlined).
 
-用 macOS 自带 sips：转 JPEG、长边压到 1500px、质量 ~62。
-输出到 assets/img/，语义命名。原始高清图不入库。
+Uses macOS's built-in sips: convert to JPEG, cap the long edge at 1500px, quality ~62.
+Output to assets/img/ with semantic names. Original high-res photos are not committed.
 """
 import os
 import subprocess
@@ -16,24 +16,24 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 OUT_DIR = os.path.join(REPO, "assets", "img")
 
-# 输出名 -> (源目录, 文件名关键词, 是否必需)
+# output name -> (source dir, filename keyword, required)
 SPEC = [
-    ("hero.jpg",            GOWN, "1B9A2276", True),   # 绿纱外景（Hero 背景）
+    ("hero.jpg",            GOWN, "1B9A2276", True),   # green dress outdoor shot (Hero background)
     ("xihu-0921.jpg",       SC,   "西湖",      True),
     ("hengdian-0928.jpg",   SC,   "横店",      True),
     ("yuelao-1108.jpg",     SC,   "月老",      True),
-    ("letter-birthday.jpg", SC,   "生日",      True),  # 2025.12.23 生日手写信
-    ("letter-valentine.jpg",SC,   "情人节",    True),  # 2026.2.14 情人节手写信
+    ("letter-birthday.jpg", SC,   "生日",      True),  # 2025.12.23 birthday handwritten letter
+    ("letter-valentine.jpg",SC,   "情人节",    True),  # 2026.2.14 Valentine's Day handwritten letter
     ("move-golf.jpg",       SC,   "高尔夫",    True),
     ("ask-proposal.jpg",    SC,   "求婚",      True),
     ("xiuhe.jpg",           SC,   "秀禾",      True),
     ("lookup.jpg",          SC,   "抬起头",    True),
-    # 6.15「第一天」照片待补：拿到后加一行 ("meet-0615.jpg", SC, "第一天", True)
+    # 6.15 "Day One" photo still missing: once obtained, add a line ("meet-0615.jpg", SC, "第一天", True)
 ]
 
 
 def find_by(dirpath, keyword):
-    """按关键词匹配文件名，规避 macOS Unicode 规范化问题。"""
+    """Match filenames by keyword, working around macOS Unicode normalization quirks."""
     if not os.path.isdir(dirpath):
         return None
     for name in sorted(os.listdir(dirpath)):
@@ -57,7 +57,7 @@ def main():
         src = find_by(d, kw)
         if not src:
             missing.append((out_name, d, kw, required))
-            print("SKIP  %-22s (未找到关键词 %r 于 %s)" % (out_name, kw, d))
+            print("SKIP  %-22s (keyword %r not found in %s)" % (out_name, kw, d))
             continue
         dst = os.path.join(OUT_DIR, out_name)
         optimize(src, dst)
@@ -65,7 +65,7 @@ def main():
         print("OK    %-22s <- %-28s (%d KB)" % (out_name, os.path.basename(src), kb))
     hard = [m for m in missing if m[3]]
     if hard:
-        print("\n缺少必需素材：", [m[0] for m in hard], file=sys.stderr)
+        print("\nMissing required assets:", [m[0] for m in hard], file=sys.stderr)
         sys.exit(1)
     print("\nDONE ->", OUT_DIR)
 

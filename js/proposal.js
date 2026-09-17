@@ -29,8 +29,9 @@ export function initProposal() {
   let ti = 0;
   function dodge(e) {
     if (e) e.preventDefault();
-    // 以按钮自身的定位容器（.btns）为基准并 clamp 在其中：既不会飞出被 #ask 裁剪掉，
-    // 又把横向限制在右半侧，避免盖住"我愿意"。
+    // Anchor movement to the button's own positioning container (.btns) and clamp within it: this
+    // keeps it from flying out and being clipped by #ask, while limiting horizontal movement to the
+    // right half so it doesn't cover the "Yes" button.
     const box = no.offsetParent || asked;
     const w = box.clientWidth;
     const h = box.clientHeight;
