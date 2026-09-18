@@ -5,6 +5,10 @@ import { initProposal } from './proposal.js';
 import { initMusic } from './music.js';
 import { initHeart } from './heart.js';
 
+// The gate is fixed and hides the page behind it, so a browser-restored scroll position would go
+// unnoticed until she answers and lands mid-page. Always start from the top instead.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
 let counterDone = false;
 function renderCounter(el, days) {
   el.innerHTML = days + ' <small>天</small>';
@@ -50,6 +54,9 @@ function setupGate(startMusic) {
     gate.classList.add('open');
     document.body.classList.remove('locked');
     document.body.classList.add('revealed');
+    // A reloaded/bfcached page can keep a restored scroll offset hidden behind the fixed gate;
+    // without this she would answer and land mid-page instead of on the hero.
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     setTimeout(() => { gate.style.display = 'none'; }, 900);
     initReveal({ onCounter: runCounter });
     // Answering the gate is the user gesture browsers require before audio may play.
